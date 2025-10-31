@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>생태·환경 퀴즈 - 10문제</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg1: #0f172a;
+    --bg2: #083344;
+    --card: rgba(255,255,255,0.06);
+    --accent: #2ee6a7;
+    --accent-2: #6be7ff;
+    --muted: rgba(255,255,255,0.7);
+    --glass: rgba(255,255,255,0.04);
+    --success: #6ee7b7;
+    --danger: #ff7a7a;
+    --max-width: 1100px;
+  }
+
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+    background: linear-gradient(180deg,var(--bg1) 0%, #05202a 60%);
+    color: white;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* Full-screen layout */
+  .app{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+    box-sizing:border-box;
+  }
+
+  .container{
+    width:100%;
+    max-width:var(--max-width);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:18px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+    overflow:hidden;
+    display:grid;
+    grid-template-columns: 420px 1fr;
+    gap:0;
+    min-height:70vh;
+  }
+
+  /* Left panel - visual */
+  .left{
+    padding:36px;
+    background: linear-gradient(180deg, rgba(10,30,30,0.6), rgba(5,20,23,0.9));
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    align-items:flex-start;
+    justify-content:center;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .logo .mark{
+    width:64px;
+    height:64px;
+    border-radius:14px;
+    background: conic-gradient(from 120deg, var(--accent), var(--accent-2), #7b9cff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    color:#042022;
+    box-shadow: 0 6px 18px rgba(46,230,167,0.12);
+  }
+  .title{
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .subtitle{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.45;
+  }
+
+  .progress-wrap{
+    width:100%;
+    margin-top:12px;
+  }
+  .progress{
+    height:12px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress > i{
+    display:block;
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius:999px;
+    transition:width 450ms cubic-bezier(.2,.9,.2,1);
+    box-shadow: 0 6px 18px rgba(107,231,255,0.06);
+  }
+  .meta{
+    display:flex;
+    width:100%;
+    justify-content:space-between;
+    font-size:13px;
+    margin-top:10px;
+    color:var(--muted);
+  }
+
+  /* Right panel - quiz area */
+  .right{
+    padding:36px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    position:relative;
+    background:
+      radial-gradient(600px 200px at 10% 10%, rgba(107,231,255,0.03), transparent 10%),
+      radial-gradient(400px 140px at 80% 90%, rgba(46,230,167,0.03), transparent 10%);
+  }
+
+  .card{
+    background: var(--card);
+    border-radius:12px;
+    padding:22px;
+    box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .question-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+  }
+  .q-index{
+    font-size:14px;
+    color:var(--muted);
+  }
+  .q-text{
+    margin-top:10px;
+    font-size:20px;
+    line-height:1.35;
+    font-weight:600;
+  }
+
+  .choices{
+    display:grid;
+    gap:12px;
+    margin-top:16px;
+  }
+  .choice{
+    padding:14px 16px;
+    border-radius:10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border:1px solid rgba(255,255,255,0.03);
+    cursor:pointer;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    user-select:none;
+  }
+  .choice:hover{ transform:translateY(-4px); box-shadow: 0 12px 26px rgba(2,6,23,0.6); }
+  .choice .label{
+    min-width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background: rgba(255,255,255,0.02);
+    font-weight:700;
+  }
+  .choice .txt{ font-size:15px; color:var(--muted); }
+
+  .choice.correct{
+    border-color: rgba(110,231,183,0.25);
+    background: linear-gradient(90deg, rgba(110,231,183,0.06), rgba(46,230,167,0.03));
+    box-shadow: 0 10px 30px rgba(46,230,167,0.06);
+  }
+  .choice.wrong{
+    border-color: rgba(255,122,122,0.15);
+    background: linear-gradient(90deg, rgba(255,122,122,0.03), rgba(255,122,122,0.01));
+  }
+
+  .explain{
+    margin-top:12px;
+    font-size:13px;
+    color:var(--muted);
+    display:none;
+  }
+  .explain.show{ display:block; }
+
+  .controls{
+    display:flex;
+    gap:12px;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:12px;
+  }
+
+  .btn{
+    background: linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#042022;
+    padding:10px 16px;
+    border-radius:10px;
+    border:none;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow: 0 8px 20px rgba(46,230,167,0.08);
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid rgba(255,255,255,0.04);
+    font-weight:600;
+  }
+  .small{
+    font-size:13px;
+    padding:9px 12px;
+    border-radius:9px;
+  }
+
+  .footer{
+    margin-top:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  /* result overlay */
+  .overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));
+    z-index:30;
+    padding:40px;
+    box-sizing:border-box;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 300ms ease;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+
+  .result{
+    max-width:680px;
+    width:100%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:28px;
+    text-align:center;
+    box-shadow: 0 20px 50px rgba(2,6,23,0.6);
+  }
+  .result h2{ margin:0; font-size:28px; }
+  .score{
+    font-size:56px;
+    margin:14px 0 6px 0;
+    font-weight:800;
+  }
+  .share{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+    justify-content:center;
+  }
+
+  /* confetti canvas */
+  #confetti{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:40;
+  }
+
+  /* Responsive */
+  @media (max-width:980px){
+    .container{ grid-template-columns: 1fr; min-height:80vh; }
+    .left{ order:2; padding:20px; align-items:center; text-align:center; }
+    .right{ order:1; padding:20px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="container" role="application" aria-label="생태 환경 퀴즈 앱">
+    <div class="left">
+      <div class="logo">
+        <div class="mark">E</div>
+        <div>
+          <div class="title">EcoQuiz — 생태·환경 퀴즈</div>
+          <div class="subtitle">재미있고 쉬운 10문제로 환경 지식을 확인해봐!</div>
+        </div>
+      </div>
+
+      <div class="card progress-wrap" aria-hidden="true">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;">진행도</div>
+          <div style="font-size:13px;color:var(--muted);" id="progressText">0 / 10</div>
+        </div>
+        <div class="progress" aria-hidden="true" style="margin-top:10px;">
+          <i id="progressBar"></i>
+        </div>
+        <div class="meta">
+          <div id="scoreMeta">점수: 0</div>
+          <div id="hintMeta">기록: 정답을 선택하면 해설이 표시됨</div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;color:var(--muted);font-size:13px;">
+        • 각 문제는 1점. <br>
+        • 틀려도 다음 문제로 진행 가능. 정답은 해설로 확인 가능. <br>
+        • 모바일/데스크톱 모두 최적화.
+      </div>
+    </div>
+
+    <div class="right">
+      <canvas id="confetti"></canvas>
+
+      <div class="card" id="quizCard" aria-live="polite">
+        <div class="question-head">
+          <div class="q-index" id="qIndex">문제 1</div>
+          <div id="timer" style="color:var(--muted); font-size:13px;">—</div>
+        </div>
+
+        <div class="q-text" id="qText">로딩 중...</div>
+
+        <div class="choices" id="choices" role="listbox" aria-label="답 선택">
+          <!-- choices injected here -->
+        </div>
+
+        <div class="explain card" id="explain"></div>
+
+        <div class="controls">
+          <div>
+            <button class="btn ghost small" id="prevBtn" disabled>이전</button>
+            <button class="btn ghost small" id="nextBtn">다음</button>
+          </div>
+          <div>
+            <button class="btn small" id="resetBtn">다시하기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div>총 10문제 · 자연과 환경에 관한 기초 상식</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="font-size:13px;color:var(--muted);">Made with 🌱</div>
+        </div>
+      </div>
+
+      <!-- overlay result -->
+      <div class="overlay" id="overlay" aria-hidden="true">
+        <div class="result" role="dialog" aria-modal="true">
+          <h2 id="resultTitle">결과</h2>
+          <div class="score" id="resultScore">0 / 10</div>
+          <div id="resultText" style="color:var(--muted); margin-top:8px;">설명</div>
+          <div class="share">
+            <button class="btn ghost small" id="reviewBtn">문제 다시보기</button>
+            <button class="btn small" id="againBtn">다시풀기</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  EcoQuiz - 10 questions
+  - Each question: {q, choices:[], answer: index, explain}
+  - Single page app with state
+*/
+
+const questions = [
+  {
+    q: "지구 온난화의 주요 원인으로 가장 큰 영향을 미치는 것은 무엇인가?",
+    choices: ["오존층 파괴", "이산화탄소(CO₂) 등 온실가스 증가", "자외선 증가", "자연적인 기후 변화"],
+    answer: 1,
+    explain: "산업혁명 이후 화석연료 연소 등으로 대기 중 온실가스가 증가하면서 지구 평균기온이 상승했음."
+  },
+  {
+    q: "다음 중 생물 다양성(Biodiversity)에 포함되지 않는 요소는?",
+    choices: ["유전자 다양성", "종 다양성", "생태계 다양성", "기온의 일시적 변화"],
+    answer: 3,
+    explain: "생물다양성은 유전자, 종(생물종), 생태계의 다양성을 포함하며, 일시적 기후 변동은 포함되지 않음."
+  },
+  {
+    q: "플라스틱 쓰레기의 분해에 대해 옳은 설명은?",
+    choices: ["자연에서 빠르게 분해되어 무해해진다", "일부 플라스틱은 수백 년 동안 분해되지 않을 수 있다", "바다에 들어가면 금방 사라진다", "태워도 환경에 영향이 없다"],
+    answer: 1,
+    explain: "폴리에틸렌 등 플라스틱은 분해가 매우 느려 수십~수백 년 잔존하며, 미세플라스틱 문제를 유발함."
+  },
+  {
+    q: "탄소중립(Carbon Neutral)의 의미는 무엇인가?",
+    choices: ["탄소 배출을 전혀 하지 않는 것", "배출한 탄소만큼 흡수하거나 상쇄하여 순 배출이 0이 되는 것", "탄소를 금지하는 정책", "탄소를 더 많이 배출하는 것"],
+    answer: 1,
+    explain: "탄소중립은 배출된 탄소를 흡수·상쇄해 순 배출량을 0으로 만드는 개념임."
+  },
+  {
+    q: "오염물질이 먹이사슬을 통해 상위 포식자로 더 농축되는 현상을 무엇이라 하는가?",
+    choices: ["생물농축(Biomagnification)", "분해", "용해", "휘발"],
+    answer: 0,
+    explain: "생물농축은 특정 유해물질이 먹이사슬을 따라 상위 포식자로 갈수록 농도가 증가하는 현상임."
+  },
+  {
+    q: "산성비의 주된 원인은 무엇인가?",
+    choices: ["미세먼지(PM10)", "질소산화물(NOx)과 황산화물(SOx) 등의 대기오염물질", "오존층 파괴", "자외선 증가"],
+    answer: 1,
+    explain: "산성비는 주로 화석연료 연소로 발생한 질소산화물과 황산화물이 물과 반응해 생김."
+  },
+  {
+    q: "도시의 열섬현상(Urban Heat Island)을 줄이려면 어떤 방법이 효과적인가?",
+    choices: ["아스팔트 면적 확대", "도심 녹지(나무, 옥상녹화) 확대", "건물 색을 어둡게 칠하기", "나무 베어내기"],
+    answer: 1,
+    explain: "녹지와 수면 확대, 반사 재료 사용 등은 열섬을 완화하는 데 도움이 됨."
+  },
+  {
+    q: "재생에너지에 해당하지 않는 것은?",
+    choices: ["태양광", "풍력", "석탄 발전", "지열"],
+    answer: 2,
+    explain: "석탄 발전은 화석연료 기반으로 재생에너지가 아님."
+  },
+  {
+    q: "멸종위기종을 보호하는 데 가장 효과적인 방법은 무엇인가?",
+    choices: ["서식지 보전과 복원", "사냥 허용", "서식지 파괴", "유해 동물 방치"],
+    answer: 0,
+    explain: "서식지 보전·복원, 밀렵 금지, 생물다양성 보호정책이 핵심임."
+  },
+  {
+    q: "지속가능한 소비(Sustainable consumption)의 예로 옳지 않은 것은?",
+    choices: ["재사용 가능한 제품 사용", "지역산 식품 선택", "과도한 일회용품 사용", "수리·재활용 선택"],
+    answer: 2,
+    explain: "과도한 일회용품 사용은 지속가능한 소비의 반대임."
+  }
+];
+
+let state = {
+  idx: 0,
+  answers: Array(questions.length).fill(null), // user selected index or null
+  score: 0,
+};
+
+const qIndexEl = document.getElementById('qIndex');
+const qTextEl = document.getElementById('qText');
+const choicesEl = document.getElementById('choices');
+const explainEl = document.getElementById('explain');
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const scoreMeta = document.getElementById('scoreMeta');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resetBtn = document.getElementById('resetBtn');
+const overlay = document.getElementById('overlay');
+const resultScore = document.getElementById('resultScore');
+const resultText = document.getElementById('resultText');
+const reviewBtn = document.getElementById('reviewBtn');
+const againBtn = document.getElementById('againBtn');
+
+function renderQuestion(){
+  const i = state.idx;
+  const item = questions[i];
+  qIndexEl.textContent = `문제 ${i+1}`;
+  qTextEl.textContent = item.q;
+  choicesEl.innerHTML = '';
+  explainEl.classList.remove('show');
+  explainEl.textContent = '';
+  // render choices
+  item.choices.forEach((c, j) => {
+    const d = document.createElement('div');
+    d.className = 'choice';
+    d.setAttribute('role','option');
+    d.setAttribute('tabindex','0');
+    d.dataset.choice = j;
+    d.innerHTML = `<div class="label">${String.fromCharCode(65+j)}</div><div class="txt">${c}</div>`;
+    d.addEventListener('click', onChoose);
+    d.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.click(); }
+    });
+    choicesEl.appendChild(d);
+  });
+
+  updateProgress();
+  updateNav();
+  highlightAnswered();
+}
+
+function onChoose(e){
+  const el = e.currentTarget;
+  const choice = Number(el.dataset.choice);
+  const i = state.idx;
+  // if already answered for this question, reveal/allow change? We'll lock after first selection to keep 심플
+  if(state.answers[i] !== null){
+    // already answered, do nothing
+    return;
+  }
+
+  state.answers[i] = choice;
+  const correct = questions[i].answer;
+  if(choice === correct){
+    state.score += 1;
+    el.classList.add('correct');
+    showExplain(true);
+    burstConfetti();
+  } else {
+    el.classList.add('wrong');
+    // highlight correct
+    const nodes = choicesEl.querySelectorAll('.choice');
+    if(nodes[correct]) nodes[correct].classList.add('correct');
+    showExplain(false);
+  }
+  updateProgress();
+  // auto-enable next after small delay
+  setTimeout(()=> {
+    if(state.idx < questions.length -1){
+      state.idx++;
+      renderQuestion();
+    } else {
+      // show results
+      showResult();
+    }
+  }, 700);
+}
+
+function showExplain(correct){
+  const i = state.idx;
+  explainEl.textContent = questions[i].explain;
+  explainEl.classList.add('show');
+}
+
+function updateProgress(){
+  const answered = state.answers.filter(x=> x !== null).length;
+  progressText.textContent = `${answered} / ${questions.length}`;
+  const percent = Math.round((answered / questions.length) * 100);
+  progressBar.style.width = percent + '%';
+  scoreMeta.textContent = `점수: ${state.score}`;
+}
+
+function updateNav(){
+  prevBtn.disabled = state.idx === 0;
+  prevBtn.style.opacity = prevBtn.disabled ? 0.5 : 1;
+  nextBtn.disabled = state.idx === questions.length -1;
+  nextBtn.style.opacity = nextBtn.disabled ? 0.5 : 1;
+}
+
+function highlightAnswered(){
+  const i = state.idx;
+  const user = state.answers[i];
+  const nodes = choicesEl.querySelectorAll('.choice');
+  nodes.forEach((n, k) => {
+    n.classList.remove('correct','wrong');
+    if(user !== null){
+      if(k === questions[i].answer) n.classList.add('correct');
+      if(k === user && user !== questions[i].answer) n.classList.add('wrong');
+      explainEl.classList.add('show');
+      explainEl.textContent = questions[i].explain;
+    }
+  });
+}
+
+// navigation
+prevBtn.addEventListener('click', ()=>{
+  if(state.idx > 0){
+    state.idx--;
+    renderQuestion();
+  }
+});
+nextBtn.addEventListener('click', ()=>{
+  if(state.idx < questions.length -1){
+    state.idx++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+resetBtn.addEventListener('click', resetAll);
+
+reviewBtn.addEventListener('click', ()=>{
+  overlay.classList.remove('show');
+  // show first unanswered or first question
+  state.idx = 0;
+  renderQuestion();
+});
+againBtn.addEventListener('click', ()=>{
+  overlay.classList.remove('show');
+  resetAll();
+});
+
+function showResult(){
+  overlay.classList.add('show');
+  resultScore.textContent = `${state.score} / ${questions.length}`;
+  if(state.score === questions.length){
+    resultText.textContent = "축하합니다! 모든 문제 정답이에요 🌱 환경 지식 최고!";
+  } else if(state.score >= Math.ceil(questions.length * 0.7)){
+    resultText.textContent = "잘했어요! 환경에 관심이 많네요 — 더 알아가봐요.";
+  } else {
+    resultText.textContent = "좋아요! 틀린 문제 해설을 보고 다시 풀어보세요.";
+  }
+}
+
+// reset / init
+function resetAll(){
+  state.idx = 0;
+  state.answers = Array(questions.length).fill(null);
+  state.score = 0;
+  overlay.classList.remove('show');
+  clearConfetti();
+  renderQuestion();
+}
+
+// simple canvas confetti
+const confettiCanvas = document.getElementById('confetti');
+const ctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+function resizeCanvas(){
+  confettiCanvas.width = confettiCanvas.offsetWidth;
+  confettiCanvas.height = confettiCanvas.offsetHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function burstConfetti(){
+  // create pieces
+  const count = 50;
+  for(let i=0;i<count;i++){
+    confettiPieces.push({
+      x: Math.random() * confettiCanvas.width,
+      y: -10 - Math.random()*100,
+      vx: (Math.random()-0.5) * 6,
+      vy: Math.random()*3 + 2,
+      size: Math.random()*6 + 4,
+      rot: Math.random()*360,
+      color: ['#2ee6a7','#6be7ff','#7b9cff','#ffd36b'][Math.floor(Math.random()*4)],
+      life: 80 + Math.random()*40
+    });
+  }
+  if(!confettiRunning) startConfetti();
+}
+
+let confettiRunning = false;
+function startConfetti(){
+  confettiRunning = true;
+  requestAnimationFrame(frame);
+}
+function clearConfetti(){
+  confettiPieces = [];
+  confettiRunning = false;
+  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+}
+
+function frame(){
+  ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+  for(let i=confettiPieces.length-1;i>=0;i--){
+    const p = confettiPieces[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08; // gravity
+    p.rot += 6;
+    p.life--;
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    ctx.rotate(p.rot * Math.PI / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+    ctx.restore();
+    if(p.y > confettiCanvas.height + 50 || p.life <= 0) confettiPieces.splice(i,1);
+  }
+  if(confettiPieces.length > 0) requestAnimationFrame(frame);
+  else confettiRunning = false;
+}
+
+// initial render
+renderQuestion();
+
+// keyboard shortcuts: N = next, P = prev, R = reset
+document.addEventListener('keydown', (e)=>{
+  if(e.key.toLowerCase() === 'n') nextBtn.click();
+  if(e.key.toLowerCase() === 'p') prevBtn.click();
+  if(e.key.toLowerCase() === 'r') resetBtn.click();
+});
+</script>
+</body>
+</html>
